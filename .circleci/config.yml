@@ -26,3 +26,23 @@ jobs:
 
       # run tests! ppp
       - run: yarn test
+  deploy:
+    docker:
+      - image: circleci/node:10.16.0
+    steps:
+      - checkout
+      - run:
+          name: Deploy Master it pto Heroku
+          command: |
+            git push https://heroku:$ops200-deliveritwell@git.heroku.com/$ops200-deliveritwell.git main
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: main  
